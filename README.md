@@ -8,11 +8,13 @@ semua data tersimpan di `localStorage` browser.
 ## Fitur
 
 - Mission generator berdasarkan NIM (Chaos Boss, Control Move, Mission Modifier)
-- Chaos Profile (kekuatan & keterbatasan diri)
-- Control Plan
-- Daily Tracker (48/72 jam sesuai Mission Modifier) dengan upload foto bukti pengerjaan (dikompres otomatis di browser sebelum disimpan)
-- Patch Note Generator + Copy Patch Note
-- Export Patch Note sebagai PDF (teks + foto bukti pengerjaan)
+- Boss Encounter dengan Boss HP bar & status (Boss Defeated / Weakened / Still Active)
+- System Scan (kekuatan & keterbatasan diri)
+- Battle Strategy dengan preset chip waktu & backup plan
+- Battle Log (48/72 jam sesuai Mission Modifier) dengan upload foto bukti pengerjaan (dikompres otomatis di browser sebelum disimpan) dan estimasi damage ke boss per hari
+- Achievement Badge otomatis (First Strike, Evidence Hunter, System Stabilizer, Chaos Reader, Boss Slayer, Recovery Initiate)
+- Mission Report Generator + Copy Mission Report
+- Export Mission Report sebagai PDF (teks, Boss HP, Battle Result, Achievement Badge, foto bukti pengerjaan)
 - Export & Import Mission Data (JSON via clipboard)
 - Reset Mission
 - Progress otomatis tersimpan di browser (localStorage)

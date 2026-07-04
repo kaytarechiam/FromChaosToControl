@@ -1,11 +1,11 @@
 const STEP_LABELS = [
   "Landing",
   "Identity",
-  "Mission",
-  "Chaos Profile",
-  "Control Plan",
-  "Tracker",
-  "Patch Note",
+  "Boss Encounter",
+  "System Scan",
+  "Battle Strategy",
+  "Battle Log",
+  "Mission Report",
 ];
 
 export default function StepNav({ current, maxUnlocked, onJump }) {

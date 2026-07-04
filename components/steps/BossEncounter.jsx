@@ -1,5 +1,7 @@
 import TerminalFrame from "@/components/ui/TerminalFrame";
 import Button from "@/components/ui/Button";
+import HpBar from "@/components/ui/HpBar";
+import { calcBossHp, getBossStatus } from "@/lib/bossHp";
 
 function ResultCard({ label, name, desc }) {
   return (
@@ -13,13 +15,15 @@ function ResultCard({ label, name, desc }) {
   );
 }
 
-export default function MissionResult({ identity, mission, onBack, onNext }) {
+export default function BossEncounter({ identity, mission, tracker, onBack, onNext }) {
   if (!mission) return null;
   const { chaosBoss, controlMove, modifier } = mission;
+  const { finalHp } = calcBossHp(tracker);
+  const status = getBossStatus(finalHp);
 
   return (
-    <TerminalFrame title="mission_result.log">
-      <h2 className="mb-1 text-xl font-bold text-slate-50">Mission Result</h2>
+    <TerminalFrame title="boss_encounter.log">
+      <h2 className="mb-1 text-xl font-bold text-slate-50">Boss Encounter</h2>
       <p className="mb-5 text-sm text-slate-400">
         Mission objective: susun rencana pengelolaan diri yang sesuai dengan
         kekuatan dan keterbatasanmu, lalu terapkan dalam kehidupan nyata.
@@ -40,6 +44,16 @@ export default function MissionResult({ identity, mission, onBack, onNext }) {
         </div>
       </div>
 
+      <div className="mb-5 rounded-lg border border-console-border/60 bg-black/20 p-4">
+        <div className="mb-2 flex items-center justify-between">
+          <p className="text-lg font-bold text-slate-50">{chaosBoss.name}</p>
+          <span className="rounded-full border border-console-border px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-slate-300">
+            {status}
+          </span>
+        </div>
+        <HpBar hp={finalHp} label="Boss HP" />
+      </div>
+
       <div className="space-y-3">
         <ResultCard label="Your Chaos Boss" name={chaosBoss.name} desc={chaosBoss.desc} />
         <ResultCard label="Your Control Move" name={controlMove.name} desc={controlMove.instruction} />
@@ -50,7 +64,7 @@ export default function MissionResult({ identity, mission, onBack, onNext }) {
         <Button variant="secondary" onClick={onBack}>
           Back
         </Button>
-        <Button onClick={onNext}>Lanjut ke Chaos Profile</Button>
+        <Button onClick={onNext}>Lanjut ke System Scan</Button>
       </div>
     </TerminalFrame>
   );

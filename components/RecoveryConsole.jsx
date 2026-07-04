@@ -2,14 +2,14 @@
 
 import { useEffect, useMemo, useState } from "react";
 import StepNav from "@/components/ui/StepNav";
+import Warning from "@/components/ui/Warning";
 import Landing from "@/components/steps/Landing";
 import IdentityInput from "@/components/steps/IdentityInput";
-import MissionResult from "@/components/steps/MissionResult";
-import ChaosProfile from "@/components/steps/ChaosProfile";
-import ControlPlan from "@/components/steps/ControlPlan";
-import DailyTracker from "@/components/steps/DailyTracker";
-import PatchNote from "@/components/steps/PatchNote";
-import Warning from "@/components/ui/Warning";
+import BossEncounter from "@/components/steps/BossEncounter";
+import SystemScan from "@/components/steps/SystemScan";
+import BattleStrategy from "@/components/steps/BattleStrategy";
+import BattleLog from "@/components/steps/BattleLog";
+import MissionReport from "@/components/steps/MissionReport";
 import { generateMission } from "@/lib/generateMission";
 import { buildTrackerDays, getDefaultState, loadState, saveState, clearState } from "@/lib/storage";
 import {
@@ -72,8 +72,8 @@ export default function RecoveryConsole() {
     setState((s) => ({ ...s, tracker }));
   }
 
-  function updatePatchNote(patchNote) {
-    setState((s) => ({ ...s, patchNote }));
+  function updateMissionReport(missionReport) {
+    setState((s) => ({ ...s, missionReport }));
   }
 
   function handleReset() {
@@ -120,16 +120,17 @@ export default function RecoveryConsole() {
       )}
 
       {state.step === 2 && (
-        <MissionResult
+        <BossEncounter
           identity={state.identity}
           mission={state.mission}
+          tracker={state.tracker}
           onBack={() => goToStep(1)}
           onNext={() => goToStep(3)}
         />
       )}
 
       {state.step === 3 && (
-        <ChaosProfile
+        <SystemScan
           mission={state.mission}
           value={state.chaosProfile}
           onChange={updateChaosProfile}
@@ -139,7 +140,7 @@ export default function RecoveryConsole() {
       )}
 
       {state.step === 4 && (
-        <ControlPlan
+        <BattleStrategy
           mission={state.mission}
           chaosProfile={state.chaosProfile}
           value={state.controlPlan}
@@ -150,7 +151,8 @@ export default function RecoveryConsole() {
       )}
 
       {state.step === 5 && (
-        <DailyTracker
+        <BattleLog
+          mission={state.mission}
           tracker={state.tracker}
           onChange={updateTracker}
           onBack={() => goToStep(4)}
@@ -159,9 +161,9 @@ export default function RecoveryConsole() {
       )}
 
       {state.step === 6 && (
-        <PatchNote
+        <MissionReport
           state={state}
-          onChangePatchNote={updatePatchNote}
+          onChangeMissionReport={updateMissionReport}
           onBack={() => goToStep(5)}
           onReset={handleReset}
           onImport={handleImport}

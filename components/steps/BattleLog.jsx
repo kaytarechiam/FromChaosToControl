@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import TerminalFrame from "@/components/ui/TerminalFrame";
 import Button from "@/components/ui/Button";
 import Warning from "@/components/ui/Warning";
+import HpBar from "@/components/ui/HpBar";
 import { validateTrackerHasEntry } from "@/lib/validation";
 import { compressImageFile } from "@/lib/imageUtils";
+import { calcBossHp, calcDayDamage } from "@/lib/bossHp";
 
 function LevelPicker(props) {
   const { label, value, onChange } = props;
@@ -58,7 +60,7 @@ function PhotoUpload({ photo, onPhoto, onRemove }) {
 
   return (
     <div>
-      <label className="mb-1 block text-xs text-slate-400">Foto bukti pengerjaan</label>
+      <label className="mb-1 block text-xs text-slate-400">Evidence Upload (foto bukti)</label>
 
       {photo ? (
         <div className="flex items-start gap-3">
@@ -100,20 +102,38 @@ function PhotoUpload({ photo, onPhoto, onRemove }) {
   );
 }
 
+function DamageBadge({ damage }) {
+  if (damage === 0) return null;
+  const isHeal = damage < 0;
+  return (
+    <p
+      className={`mt-1 font-mono text-xs ${
+        isHeal ? "text-console-danger" : "text-console-accent"
+      }`}
+    >
+      {isHeal
+        ? `Boss pulih +${Math.abs(damage)} HP hari ini`
+        : `Damage ke Boss hari ini: -${damage} HP`}
+    </p>
+  );
+}
+
 function DayCard({ day, onChange }) {
   function set(field, val) {
     onChange({ ...day, [field]: val });
   }
 
+  const damage = calcDayDamage(day);
+
   return (
     <div className="rounded-lg border border-console-border/60 bg-black/20 p-4">
       <p className="mb-3 font-mono text-xs uppercase tracking-widest text-console-accent2/80">
-        Hari ke-{day.day}
+        Day {day.day} Battle Log
       </p>
 
       <div className="space-y-4">
         <div>
-          <p className="mb-1.5 text-xs text-slate-400">Apakah rencana dicoba hari ini?</p>
+          <p className="mb-1.5 text-xs text-slate-400">Did you attack the boss today?</p>
           <div className="flex gap-2">
             {["ya", "tidak"].map((opt) => (
               <button
@@ -130,16 +150,17 @@ function DayCard({ day, onChange }) {
               </button>
             ))}
           </div>
+          <DamageBadge damage={damage} />
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
           <LevelPicker
-            label="Chaos level (1-5)"
+            label="Chaos Damage Taken (1-5)"
             value={day.chaosLevel}
             onChange={(v) => set("chaosLevel", v)}
           />
           <LevelPicker
-            label="Energy level (1-5)"
+            label="Energy Core (1-5)"
             value={day.energyLevel}
             onChange={(v) => set("energyLevel", v)}
           />
@@ -152,7 +173,7 @@ function DayCard({ day, onChange }) {
         />
 
         <div>
-          <label className="mb-1 block text-xs text-slate-400">Catatan singkat (opsional)</label>
+          <label className="mb-1 block text-xs text-slate-400">Evidence Text (opsional)</label>
           <textarea
             value={day.evidence}
             onChange={(e) => set("evidence", e.target.value)}
@@ -163,7 +184,7 @@ function DayCard({ day, onChange }) {
         </div>
 
         <div>
-          <label className="mb-1 block text-xs text-slate-400">Catatan berhasil / gagal</label>
+          <label className="mb-1 block text-xs text-slate-400">Battle Note (berhasil / gagal)</label>
           <textarea
             value={day.note}
             onChange={(e) => set("note", e.target.value)}
@@ -177,8 +198,10 @@ function DayCard({ day, onChange }) {
   );
 }
 
-export default function DailyTracker({ tracker, onChange, onBack, onNext }) {
+export default function BattleLog({ mission, tracker, onChange, onBack, onNext }) {
   const [error, setError] = useState(null);
+
+  const { finalHp } = useMemo(() => calcBossHp(tracker), [tracker]);
 
   function updateDay(index, updatedDay) {
     const next = tracker.map((d, i) => (i === index ? updatedDay : d));
@@ -196,11 +219,15 @@ export default function DailyTracker({ tracker, onChange, onBack, onNext }) {
   }
 
   return (
-    <TerminalFrame title={`daily_tracker.log [${tracker.length}d]`}>
-      <h2 className="mb-1 text-xl font-bold text-slate-50">Daily Tracker</h2>
-      <p className="mb-5 text-sm text-slate-400">
-        Catat penerapan rencana kamu selama {tracker.length} hari ke depan.
+    <TerminalFrame title={`battle_log.log [${tracker.length}d]`}>
+      <h2 className="mb-1 text-xl font-bold text-slate-50">Battle Log</h2>
+      <p className="mb-4 text-sm text-slate-400">
+        Catat serangan kamu ke {mission?.chaosBoss?.name} selama {tracker.length} hari ke depan.
       </p>
+
+      <div className="mb-5 rounded-lg border border-console-border/60 bg-black/20 p-4">
+        <HpBar hp={finalHp} label={`${mission?.chaosBoss?.name || "Boss"} HP`} />
+      </div>
 
       <Warning>{error}</Warning>
 
@@ -214,7 +241,7 @@ export default function DailyTracker({ tracker, onChange, onBack, onNext }) {
         <Button variant="secondary" onClick={onBack}>
           Back
         </Button>
-        <Button onClick={handleNext}>Lanjut ke Patch Note</Button>
+        <Button onClick={handleNext}>Lanjut ke Mission Report</Button>
       </div>
     </TerminalFrame>
   );

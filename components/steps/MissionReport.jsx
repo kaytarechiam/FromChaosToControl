@@ -4,11 +4,13 @@ import { useMemo, useState } from "react";
 import TerminalFrame from "@/components/ui/TerminalFrame";
 import Button from "@/components/ui/Button";
 import Warning from "@/components/ui/Warning";
-import { buildPatchNoteText } from "@/lib/patchNote";
+import HpBar from "@/components/ui/HpBar";
+import BadgeGrid from "@/components/ui/BadgeGrid";
+import { buildMissionReportText, getMissionReportData } from "@/lib/missionReport";
 import { exportStateAsJson, parseImportedJson } from "@/lib/storage";
-import { generatePatchNotePdf } from "@/lib/pdfExport";
+import { generateMissionReportPdf } from "@/lib/pdfExport";
 
-export default function PatchNote({ state, onChangePatchNote, onBack, onReset, onImport }) {
+export default function MissionReport({ state, onChangeMissionReport, onBack, onReset, onImport }) {
   const [copyStatus, setCopyStatus] = useState("");
   const [exportStatus, setExportStatus] = useState("");
   const [pdfStatus, setPdfStatus] = useState("");
@@ -18,17 +20,21 @@ export default function PatchNote({ state, onChangePatchNote, onBack, onReset, o
   const [importError, setImportError] = useState(null);
   const [resetConfirm, setResetConfirm] = useState(false);
 
-  const patchText = useMemo(() => buildPatchNoteText(state), [state]);
+  const reportText = useMemo(() => buildMissionReportText(state), [state]);
+  const { bossHp, battleResult, achievements } = useMemo(
+    () => getMissionReportData(state),
+    [state]
+  );
   const photoDays = state.tracker.filter((d) => d.evidencePhoto);
 
   function set(field, val) {
-    onChangePatchNote({ ...state.patchNote, [field]: val });
+    onChangeMissionReport({ ...state.missionReport, [field]: val });
   }
 
-  async function copyPatchNote() {
+  async function copyMissionReport() {
     try {
-      await navigator.clipboard.writeText(patchText);
-      setCopyStatus("Patch Note berhasil disalin ke clipboard.");
+      await navigator.clipboard.writeText(reportText);
+      setCopyStatus("Mission Report berhasil disalin ke clipboard.");
     } catch {
       setCopyStatus("Gagal menyalin otomatis, silakan copy manual dari kotak teks.");
     }
@@ -69,10 +75,9 @@ export default function PatchNote({ state, onChangePatchNote, onBack, onReset, o
     setPdfLoading(true);
     setPdfStatus("");
     try {
-      await generatePatchNotePdf({
+      await generateMissionReportPdf({
         identity: state.identity,
-        mission: state.mission,
-        patchText,
+        missionReportText: reportText,
         tracker: state.tracker,
       });
     } catch (err) {
@@ -83,11 +88,29 @@ export default function PatchNote({ state, onChangePatchNote, onBack, onReset, o
   }
 
   return (
-    <TerminalFrame title="patch_note_generator.exe">
-      <h2 className="mb-1 text-xl font-bold text-slate-50">Patch Note Generator</h2>
+    <TerminalFrame title="mission_report_generator.exe">
+      <h2 className="mb-1 text-xl font-bold text-slate-50">Mission Report Generator</h2>
       <p className="mb-5 text-sm text-slate-400">
-        Lengkapi ringkasan singkat, lalu generate Patch Note v1.0 kamu.
+        Misi ini cuma sekali jalan. Lengkapi ringkasan singkat, lalu generate Mission Report final
+        kamu.
       </p>
+
+      <div className="mb-5 rounded-lg border border-console-border/60 bg-black/20 p-4">
+        <div className="mb-2 flex items-center justify-between">
+          <p className="text-sm font-bold text-slate-50">{state.mission?.chaosBoss?.name}</p>
+          <span className="rounded-full border border-console-border px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-slate-300">
+            {battleResult}
+          </span>
+        </div>
+        <HpBar hp={bossHp} label="Boss HP Akhir" />
+      </div>
+
+      <div className="mb-5">
+        <p className="mb-2 font-mono text-[10px] uppercase tracking-widest text-console-accent2/80">
+          Achievement Badge
+        </p>
+        <BadgeGrid achievements={achievements} />
+      </div>
 
       <div className="mb-5 space-y-4">
         <div>
@@ -95,7 +118,7 @@ export default function PatchNote({ state, onChangePatchNote, onBack, onReset, o
             Hal yang berhasil
           </label>
           <textarea
-            value={state.patchNote.hasilBerhasil}
+            value={state.missionReport.hasilBerhasil}
             onChange={(e) => set("hasilBerhasil", e.target.value)}
             rows={2}
             placeholder="Contoh: aku jadi lebih konsisten mulai tugas lebih awal"
@@ -107,10 +130,22 @@ export default function PatchNote({ state, onChangePatchNote, onBack, onReset, o
             Hal yang belum berhasil / kendala
           </label>
           <textarea
-            value={state.patchNote.kendala}
+            value={state.missionReport.kendala}
             onChange={(e) => set("kendala", e.target.value)}
             rows={2}
             placeholder="Contoh: masih suka kebablasan scroll HP malam hari"
+            className="w-full rounded-lg border border-console-border bg-black/30 px-4 py-2.5 text-sm text-slate-100 outline-none focus:border-console-accent"
+          />
+        </div>
+        <div>
+          <label className="mb-1 block text-xs font-mono uppercase tracking-wider text-slate-400">
+            Kesimpulan akhir dari misi ini
+          </label>
+          <textarea
+            value={state.missionReport.kesimpulan}
+            onChange={(e) => set("kesimpulan", e.target.value)}
+            rows={2}
+            placeholder="Contoh: aku belajar bahwa aku lebih butuh struktur jelas biar nggak gampang chaos"
             className="w-full rounded-lg border border-console-border bg-black/30 px-4 py-2.5 text-sm text-slate-100 outline-none focus:border-console-accent"
           />
         </div>
@@ -118,10 +153,10 @@ export default function PatchNote({ state, onChangePatchNote, onBack, onReset, o
 
       <div className="rounded-lg border border-console-border/60 bg-black/30 p-4">
         <p className="mb-2 font-mono text-[10px] uppercase tracking-widest text-console-accent2/80">
-          Preview Patch Note v1.0
+          Preview Mission Report
         </p>
         <pre className="whitespace-pre-wrap break-words font-mono text-xs leading-relaxed text-slate-300">
-          {patchText}
+          {reportText}
         </pre>
       </div>
 
@@ -149,7 +184,7 @@ export default function PatchNote({ state, onChangePatchNote, onBack, onReset, o
       {copyStatus && <p className="mt-2 text-xs text-console-accent">{copyStatus}</p>}
 
       <div className="mt-4 flex flex-wrap gap-2">
-        <Button onClick={copyPatchNote}>Copy Patch Note</Button>
+        <Button onClick={copyMissionReport}>Copy Mission Report</Button>
         <Button variant="secondary" onClick={exportPdf} disabled={pdfLoading}>
           {pdfLoading ? "Membuat PDF..." : "Export as PDF"}
         </Button>

@@ -16,9 +16,9 @@ export default function Landing({ onStart }) {
         <p className="text-sm leading-relaxed text-slate-300 sm:text-base">
           Kuliah dan SPARTA bisa terasa seperti sistem yang penuh error: jadwal
           berubah, tugas numpuk, energi naik turun, dan distraksi datang terus.
-          Di misi ini, kamu akan mendeteksi chaos utama dalam dirimu, membuat
-          control plan berdasarkan kekuatan dan keterbatasanmu, lalu
-          menerapkannya dalam kehidupan nyata.
+          Di misi ini, kamu akan mendeteksi Chaos Boss utama dalam dirimu, menyusun
+          Battle Strategy berdasarkan kekuatan dan keterbatasanmu, lalu
+          menerapkannya dalam kehidupan nyata sampai boss itu berhasil kamu taklukkan.
         </p>
       </TerminalFrame>
 
@@ -28,7 +28,7 @@ export default function Landing({ onStart }) {
 
       <p className="max-w-md text-xs text-slate-500">
         Progress kamu tersimpan di browser ini. Jangan gunakan incognito dan
-        jangan hapus cache sebelum Patch Note selesai dibuat.
+        jangan hapus cache sebelum Mission Report selesai dibuat.
       </p>
     </div>
   );

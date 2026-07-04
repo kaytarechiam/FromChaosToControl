@@ -8,7 +8,7 @@ import MultiSelectChips from "@/components/ui/MultiSelectChips";
 import { KEKUATAN_OPTIONS, KETERBATASAN_OPTIONS } from "@/lib/missionData";
 import { validateChaosProfile } from "@/lib/validation";
 
-export default function ChaosProfile({ mission, value, onChange, onBack, onNext }) {
+export default function SystemScan({ mission, value, onChange, onBack, onNext }) {
   const [error, setError] = useState(null);
 
   function set(field, val) {
@@ -26,12 +26,12 @@ export default function ChaosProfile({ mission, value, onChange, onBack, onNext 
   }
 
   return (
-    <TerminalFrame title="chaos_profile.cfg">
-      <h2 className="mb-1 text-xl font-bold text-slate-50">Chaos Profile</h2>
+    <TerminalFrame title="system_scan.cfg">
+      <h2 className="mb-1 text-xl font-bold text-slate-50">System Scan</h2>
       <p className="mb-5 text-sm text-slate-400">
         Chaos Boss kamu:{" "}
-        <span className="text-console-accent">{mission?.chaosBoss?.name}</span>. Sekarang
-        petakan kekuatan dan keterbatasan dirimu sendiri.
+        <span className="text-console-accent">{mission?.chaosBoss?.name}</span>. Sekarang scan
+        kekuatan dan keterbatasan sistem (diri) kamu sendiri.
       </p>
 
       <Warning>{error}</Warning>
@@ -94,7 +94,7 @@ export default function ChaosProfile({ mission, value, onChange, onBack, onNext 
         <Button variant="secondary" onClick={onBack}>
           Back
         </Button>
-        <Button onClick={handleNext}>Simpan &amp; Lanjut ke Control Plan</Button>
+        <Button onClick={handleNext}>Simpan &amp; Lanjut ke Battle Strategy</Button>
       </div>
     </TerminalFrame>
   );
