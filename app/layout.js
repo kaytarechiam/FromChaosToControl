@@ -11,7 +11,7 @@ const jakarta = Plus_Jakarta_Sans({
 export const metadata = {
   title: "From Chaos To Control: System Recovery Console",
   description:
-    "Mission generator dan personal dashboard after-day SPARTA untuk menyusun dan menerapkan rencana pengelolaan diri.",
+    "Generator Mission Card after-day SPARTA untuk identitas, randomize misi, dan export JPG.",
 };
 
 export default function RootLayout({ children }) {

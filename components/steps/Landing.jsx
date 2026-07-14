@@ -14,21 +14,20 @@ export default function Landing({ onStart }) {
       </h1>
       <TerminalFrame title="mission_briefing.log" className="max-w-2xl text-left">
         <p className="text-sm leading-relaxed text-slate-300 sm:text-base">
-          Kuliah dan SPARTA bisa terasa seperti sistem yang penuh error: jadwal
-          berubah, tugas numpuk, energi naik turun, dan distraksi datang terus.
-          Di misi ini, kamu akan mendeteksi Chaos Boss utama dalam dirimu, menyusun
-          Battle Strategy berdasarkan kekuatan dan keterbatasanmu, lalu
-          menerapkannya dalam kehidupan nyata sampai boss itu berhasil kamu taklukkan.
+          Console ini sekarang hanya dipakai untuk mengisi identitas, melakukan
+          randomize misi berdasarkan NIM TPB, dan mengunduh Mission Card sebagai JPG.
+          Refleksi, rencana pengelolaan diri, catatan penerapan, dan refleksi akhir
+          dikerjakan di lampiran pengerjaan terpisah.
         </p>
       </TerminalFrame>
 
       <Button onClick={onStart} className="px-8 py-3 text-base">
-        &gt; Start Recovery Mission_
+        &gt; Generate Mission Card_
       </Button>
 
       <p className="max-w-md text-xs text-slate-500">
-        Progress kamu tersimpan di browser ini. Jangan gunakan incognito dan
-        jangan hapus cache sebelum Mission Report selesai dibuat.
+        Alur singkat: isi identitas, generate Mission Card, lalu export JPG untuk
+        dilampirkan ke PDF tugas.
       </p>
     </div>
   );

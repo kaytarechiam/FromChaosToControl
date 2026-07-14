@@ -1,23 +1,18 @@
 # From Chaos To Control: System Recovery Console
 
-Mission generator dan personal dashboard ringan untuk SPARTANS menyusun dan
-menerapkan rencana pengelolaan diri (after-day SPARTA task). Dibangun dengan
-Next.js (App Router) + Tailwind CSS. Tidak ada backend, database, atau login —
-semua data tersimpan di `localStorage` browser.
+Generator Mission Card ringan untuk SPARTANS. Website hanya digunakan untuk
+mengisi identitas, randomize misi berdasarkan NIM TPB, menampilkan Mission Card,
+dan mengunduhnya sebagai JPG untuk dilampirkan ke PDF tugas.
 
 ## Fitur
 
-- Mission generator berdasarkan NIM (Chaos Boss, Control Move, Mission Modifier)
-- Boss Encounter dengan Boss HP bar & status (Boss Defeated / Weakened / Still Active)
-- System Scan (kekuatan & keterbatasan diri)
-- Battle Strategy dengan preset chip waktu & backup plan
-- Battle Log (48/72 jam sesuai Mission Modifier) dengan upload foto bukti pengerjaan (dikompres otomatis di browser sebelum disimpan) dan estimasi damage ke boss per hari
-- Achievement Badge otomatis (First Strike, Evidence Hunter, System Stabilizer, Chaos Reader, Boss Slayer, Recovery Initiate)
-- Mission Report Generator + Copy Mission Report
-- Export Mission Report sebagai PDF (teks, Boss HP, Battle Result, Achievement Badge, foto bukti pengerjaan)
-- Export & Import Mission Data (JSON via clipboard)
-- Reset Mission
-- Progress otomatis tersimpan di browser (localStorage)
+- Input identitas: Nama, NIM TPB, dan KLAN
+- Dropdown KLAN I sampai KLAN X
+- Mission generator deterministic berdasarkan NIM TPB
+- Hasil Mission Card berisi Nama, NIM TPB, KLAN, Chaos Boss, Control Move, dan Mission Modifier
+- Mission Modifier berdurasi maksimal 48 jam
+- Export Mission Card sebagai JPG
+- Hanya Mission Card terakhir yang disimpan sementara di `localStorage`
 
 ## Menjalankan secara lokal
 
@@ -34,11 +29,11 @@ Buka [http://localhost:3000](http://localhost:3000) di browser.
 
 1. Push project ini ke repository GitHub/GitLab/Bitbucket.
 2. Buka [vercel.com](https://vercel.com), klik **Add New Project**, lalu import repository tersebut.
-3. Vercel otomatis mendeteksi framework Next.js — biarkan build command dan output default (`next build`).
-4. Klik **Deploy**. Tidak ada environment variable yang diperlukan karena semua data disimpan di browser (localStorage), tidak ada backend/database.
+3. Vercel otomatis mendeteksi framework Next.js, biarkan build command dan output default (`next build`).
+4. Klik **Deploy**. Tidak ada environment variable yang diperlukan.
 
 ## Catatan
 
-- Jangan gunakan mode incognito/private saat mengerjakan misi, karena `localStorage` akan hilang saat sesi ditutup.
-- Gunakan tombol **Export Mission Data** untuk membackup progress (disalin sebagai JSON ke clipboard), dan **Import Mission Data** untuk memulihkannya di device/browser lain.
-- Foto bukti pengerjaan disimpan sebagai base64 di `localStorage` (browser umumnya membatasi kapasitas ini sekitar 5-10MB). Kalau muncul warning gagal simpan otomatis, gunakan foto dengan ukuran lebih kecil atau kurangi jumlah foto.
+- Website hanya memiliki alur: isi identitas, generate Mission Card, export JPG.
+- Pengisian kondisi awal diri, rencana pengelolaan diri, catatan penerapan, dan
+  refleksi akhir dilakukan pada lampiran pengerjaan terpisah.

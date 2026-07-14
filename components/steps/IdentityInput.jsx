@@ -29,7 +29,7 @@ export default function IdentityInput({ initial, onBack, onSubmit, validateIdent
     <TerminalFrame title="identity_input.sh">
       <h2 className="mb-1 text-xl font-bold text-slate-50">Identity Input</h2>
       <p className="mb-5 text-sm text-slate-400">
-        Isi identitas kamu dulu, sistem butuh ini buat generate misi personal.
+        Isi identitas singkat ini untuk generate Mission Card personal berdasarkan NIM TPB.
       </p>
 
       <Warning>{error}</Warning>
@@ -50,14 +50,14 @@ export default function IdentityInput({ initial, onBack, onSubmit, validateIdent
 
         <div>
           <label className="mb-1 block text-xs font-mono uppercase tracking-wider text-slate-400">
-            NIM
+            NIM TPB
           </label>
           <input
             type="text"
             inputMode="numeric"
             value={identity.nim}
             onChange={(e) => handleChange("nim", e.target.value.replace(/[^\d]/g, ""))}
-            placeholder="Contoh: 1301230456"
+            placeholder="NIM TPB"
             className="w-full rounded-lg border border-console-border bg-black/30 px-4 py-2.5 text-sm text-slate-100 outline-none focus:border-console-accent"
           />
         </div>
@@ -84,7 +84,7 @@ export default function IdentityInput({ initial, onBack, onSubmit, validateIdent
           <Button type="button" variant="secondary" onClick={onBack}>
             Back
           </Button>
-          <Button type="submit">Generate Mission</Button>
+          <Button type="submit">Generate / Randomize Mission</Button>
         </div>
       </form>
     </TerminalFrame>
